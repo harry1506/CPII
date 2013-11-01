@@ -1,0 +1,92 @@
+\documentclass[a4paper]{scrartcl}
+
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[ngerman]{babel}
+\usepackage{amsmath}
+\usepackage{color} %red, green, blue, yellow, cyan, magenta, black, white
+\definecolor{mylightgray}{rgb}{0.95,0.95,0.95}
+\usepackage{listings}
+
+\lstset{ language=Matlab, 
+  numbers=left,			
+%  numberstyle=\footnotesize, 
+  numbersep = 0.5cm,   	% Abstand zwischen Nummer und Code
+  framexleftmargin=1cm, % Ramen links weiter ziehen
+  xleftmargin=1cm,	  	% Ausrichtung korrigieren
+  basicstyle=\footnotesize,
+  showstringspaces=false,
+  frame=lines,%lines, %leftline
+  backgroundcolor=\color{mylightgray},
+%  linewidth=0.95\linewidth,
+  breaklines=true,
+  morekeywords={Smetric},
+ }
+
+\title{Computational Physics II - Übung 1}
+\author{Harald Krause, Oliver Hatt}
+\date{4. Oktober 2013}
+
+\begin{document}
+\maketitle
+
+\section*{Aufgabe 1.1:}
+Es sollte eine reelle, symmetrische Matrix mit Hilfe der Jacobi Methode in Diagonalform überführt werden. Alle Bezeichnungen werden aus dem Script Computational Physics II, Ulli Wolff, WS 2013/14, Modul 22.1 Masterstudiengang Physik entnommen.
+
+Hierzu werden sukzessive orthogonale Drehungen $P_{p,q}$ in jeder möglichen p-q-Ebene durchgeführt. Dies geschieht derart, dass bei jeder Drehung immer in zwei Nicht-Diagonalelementen
+\\\\
+$$a'_{pq}=(c^2-s^2)a_{pq}+s c (a_{pp}-a_{qq})$$
+
+\noindent Null entsteht.
+
+\subsection*{a)}
+
+Für die Implementierung wurden wie vorgeschlagen die Formeln (1.27) bis (1.31) mit den auf Seite 9 gegebenen Definitionen von c, s und $\tau$ verwendet. Die dazu nötigen Umformungsschritte werden in Teilaufgabe c) erläutert.\\\\
+Außerdem wurden in der Matrix nur die Zeilen mit Hilfe von $i$ durchlaufen und so nur die untere Dreiecksmatrix berechnet (da $p<q$). Da in unserem Fall A symmetrisch ist und wir orthogonale Transformationen durchführen, ergeben sich die selben Elemente für die obere Halbmatrix und es spart Rechenaufwand diese Einträge direkt zu übernehmen.\\\\
+Es lässt sich nun beobachten wie pro Iteration die Halbmatrizen in sämtlichen Elementen gegen Null streben. Das Programm bricht die Berechnung ab, sobald alle Nichtdiagonalelemente auf Maschinengenauigkeit Null geworden sind.\\
+Die Funktion \texttt{doPpq} erzeugt für jeden Schritt (jedes Paar p-q) eine immer mehr diagonalisierte Matrix, nach dem oben beschriebenen Verfahren, außerdem enthält sie noch einen Zähler für die ausgeführten Multiplikationen.
+Für Aufgabenteil b) wird auch die Drehmatrix $P$ für die aktuelle $p-q$-Ebene zurückgegeben:\\\\
+\lstinputlisting{doPpq.m}
+
+\subsection*{b)}
+Für die Berechnung der Eigenvektoren der Matrix D wurden mit der Vorschrift (1.18) parallel die jeweiligen einzelnen Drehmatrizen $P_1 , P_2 , ...$ berechnet und aufeinander angewandt $(P = P_1 \cdot P_2 \cdot ...)$ .\\
+Durch anschließende Multiplikation von $V$ und $V^T$ ergibt sich die Einheitsmatrix und V ist daher orthogonal nach Definition.\\\\
+Im folgenden Matlab-Code ist die Funktion myEig dargestellt. Sie berechnet die Eigenwerte und die Drehmatrix nach einer vorgebenen Zahl an maximalen Iterationen (bzw. 1000 default). Weiterhin gibt sie die Zahl Zahl der Iterationen zurück für die Anzahl an Iterationen, bis sich die Nicht Diagonalelemente auf Maschinengenauigkeit nicht mehr von Null unterscheiden:\\
+\lstinputlisting{myEig.m}
+
+\subsection*{c)}
+Im Folgenden wird auf die Umformungen von (1.19), (1.20) auf (1.27), (1.28) eingegangen.\\\\
+
+Aus der Multiplikation von $V$ mit $P$ erhält man (1.19) und (1.20):
+\begin{align}
+v_{i,p}' &= c\, v_{i,p} - s\,v_{i,q} \\
+\quad 
+v_{i,q}' &= s\, v_{i,p} + c\,v_{i,q}
+\end{align}
+(1) soll nach (1.27) gleich sein zu:
+\begin{align}
+v_{i,p}' &= v_{i,p} - s\,(v_{i,q} + \tau \, v_{i,p})\\
+&= (1 - s \, \tau)\, v_{i,p} - s \, v_{i,q}
+\end{align}
+Der Vergleich von (1) mit (4) zeigt, dass lediglich der Koeffizient von $v_{i,p}$ u
+umgeformt werden muss:
+\begin{align}
+1 - s \, \tau & = \frac{1+c}{1+c} - \frac{s^2}{1+c}
+&\mbox{mit } \tau := \frac{s}{1 + c} \\
+&= \frac{1 - s^2 + c}{1+c}\\
+&= \frac{c \, (c+1)}{c+1}
+&\mbox{mit } c^2 = 1 - s^2\\
+&= c
+\end{align}
+Für die Umformung von (1.20) zu (1.28) kann nun $c$ in (2) eingesetzt werden und liefert die zweite Gleichung:
+\begin{align}
+v_{i,q}' &= v_{i,q} + s\,(v_{i,p} - \tau \, v_{i,q})
+\end{align}
+\subsection*{d)}
+Zur bestimmt der benötigten Multiplikationen wurde ein Zähler in das Programm implementiert.\\
+Für die Auswerung der Flops in Abhängigkeit der Matrixdimension, wird eine Schleife ausgeführt, bei der die Dimension von $n=4$ bis auf $n=50$ erhöht wird und jedes Mal die Multiplikationen gezählt werden. Im logarithmischen Plot kann ein konstanter Exponent verifiziert werden und der Exponent durch einen Polynomialfit bestimmt werden.\\
+Im Folgenden nun zum Abschluss das Script für die Berechnungen wurde eine 50 x 50 Zufallsmatrix erzeugt und immer der Dimension entsprechend ein Teil von ihr als A deklariert:\\
+\lstinputlisting{UE01_01a.m}
+\end{document}
+
