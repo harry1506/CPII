@@ -1,0 +1,89 @@
+% This file was created by matlab2tikz v0.4.2.
+% Copyright (c) 2008--2013, Nico Schlömer <nico.schloemer@gmail.com>
+% All rights reserved.
+% 
+% The latest updates can be retrieved from
+%   http://www.mathworks.com/matlabcentral/fileexchange/22022-matlab2tikz
+% where you can also make suggestions and rate matlab2tikz.
+% 
+% 
+% 
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=8cm,
+height=4cm,
+scale only axis,
+xmode=log,
+xmin=1,
+xmax=100,
+xminorticks=true,
+xlabel={size of nxn-matrix},
+ymode=log,
+ymin=10,
+ymax=1000000,
+yminorticks=true,
+ylabel={flops per iteration},
+title={Exponent $\gamma = 2.95$}
+]
+\addplot [
+color=blue,
+solid,
+mark=x,
+mark options={solid},
+forget plot
+]
+table[row sep=crcr]{
+1 0\\
+2 18\\
+3 66\\
+4 155.428571428571\\
+5 297\\
+6 506\\
+7 795.75\\
+8 1171.33333333333\\
+9 1648.66666666667\\
+10 2242.2\\
+11 2962.4\\
+12 3815.6\\
+13 4824.2\\
+14 5993\\
+15 7337.6\\
+16 8846\\
+17 10593\\
+18 12528.6\\
+19 14662.7272727273\\
+20 17049.4545454545\\
+21 19702.5454545455\\
+22 22610.1818181818\\
+23 25772\\
+24 29188.8333333333\\
+25 32966.1818181818\\
+26 37004.5454545455\\
+27 41347.8333333333\\
+28 46031.1666666667\\
+29 51084.3333333333\\
+30 56457.8333333333\\
+31 62193.5\\
+32 68337\\
+33 74873.5\\
+34 81813.1666666667\\
+35 89132.8333333333\\
+36 96900.8333333333\\
+37 105108.333333333\\
+38 113729.666666667\\
+39 122876.166666667\\
+40 132474.833333333\\
+41 142536\\
+42 153096\\
+43 164214.5\\
+44 175844.166666667\\
+45 187949\\
+46 200521.692307692\\
+47 213849.833333333\\
+48 227684\\
+49 241956.307692308\\
+50 257082.833333333\\
+};
+\end{axis}
+\end{tikzpicture}%

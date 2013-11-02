@@ -62,14 +62,13 @@ Das Programm bricht die Berechnung ab, sobald alle Nichtdiagonalelemente auf Mas
 
 \newpage
 \lstinputlisting[title=\textbf{doPpq.m}]{doPpq.m}
-\newpage
+
 \lstinputlisting[title=\textbf{myEig.m}]{myEig.m}
 
 \subsection*{a)}
 Die Routine wird mit einer zufälligen, symmetrischen Matrix getestet und die Resultate mit der MATLAB-eigenen Funktion \texttt{eig} verglichen.
 \lstinputlisting{taskA.m}
 
-\newpage
 Das obige Skript zeigt für $n = 5$ die gleichen Eigenwerte der beiden Funktionen.
 \begin{center}
 \begin{tabular}{p{1.5cm}lllll}

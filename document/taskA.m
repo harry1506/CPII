@@ -1,0 +1,8 @@
+clc; clear all;
+n = 5;              % set dimension
+maxV  = 50;         % matrx entries between -50 and 50
+randM = (maxV/2)*rand(n) - maxV/2; % creates nxn-matrix
+A = randM + randM';                % returns symmetric matrix
+
+D = myEig(A)
+d = eig(A)

@@ -1,0 +1,19 @@
+clc; clear all;
+global flop;
+R = 50/2*rand(50);
+A = R' + R;
+
+mi = 17;
+D = A; flo = zeros(1,mi);
+for i = 1:mi
+    flop = 0;
+    [D,~,iterDone] = myEig(D,1);
+    flo(i) = flop / iterDone;
+end
+
+plot(flo,'x');
+
+x = 1:mi;
+a =flo(x)./(50.^3);
+plot(a,'x-');
+ % -> C = 2  bei flops = 2*N^3+ ... stimmt
